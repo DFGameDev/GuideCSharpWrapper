@@ -1,6 +1,6 @@
 # GuideCSharpWrapper
 
-Welcome to the open C# wrapper for the G.U.I.D.E. input manager addon. This is an unofficial project created to make the G.U.I.D.E. system accessible to Godot C# projects. This builds directly off the <a href="https://github.com/godotneers/G.U.I.D.E">Godot Unified Input Detection Engine</a> provided by derkork found at and works in tandam with the official plugin.
+Welcome to the open source C# wrapper for the G.U.I.D.E. input manager addon. This is an unofficial project created to make the G.U.I.D.E. system accessible to Godot C# projects. This builds directly off the <a href="https://github.com/godotneers/G.U.I.D.E">Godot Unified Input Detection Engine</a> provided by derkork and works in tandam with the official plugin.
 
 For all documentation: any reference to base G.U.I.D.E. files and systems will be referred as GUIDE (all caps) while any reference to the C# wrapper will be Guide or GuideCs (camel case) for simplicity sake.
 
