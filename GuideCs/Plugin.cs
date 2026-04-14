@@ -1,3 +1,4 @@
+#if TOOLS
 using Godot;
 
 namespace GuideCs;
@@ -94,3 +95,4 @@ public partial class Plugin : EditorPlugin
         _scene.QueueFree();
     }
 }
+#endif
