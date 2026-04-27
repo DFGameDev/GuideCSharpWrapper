@@ -25,6 +25,9 @@ public partial class GuideResource : Resource
             { return; }
             
             _baseGuideObject = value;
+            // This is saved as an object var on set as there were some timing issues when freeing an object (usually on
+            // game exit) that could cause GetInstanceId() to fail and thus cause the destructor to fail.
+            _cacheLookupId = GetInstanceId();
             CacheResource(this);
         }
     }
@@ -89,23 +92,23 @@ public partial class GuideResource : Resource
     public static T GetWrappedResourceByBase<T>(GodotObject obj) where T : GuideResource
     {
               
-        // If the object is null, 
+        // If the object is null. 
         if (obj is null)
         { return null; }
         
-        // If the cache does not contain a match
+        // If the cache does not contain a match.
         if (!_lookupCache.TryGetValue(obj.GetInstanceId(), out var weakRef))
         { return null; }
 
-        // If the referenced object does not exist
+        // If the reference exists but does not have a valid target object.
         if (!weakRef.TryGetTarget(out var wrapped))
         { return null; }
         
-        // If the wrapper is of the desired type
+        // If all else is good and the wrapper is of the desired type.
         if (wrapped is T typed)
         { return typed; }
         
-        // If the wrapper exists but is not of the requested type.
+        // If a target object exists but is not of the requested type.
         GD.PushWarning($"Entry found but not of type {typeof(T).Name}.");
         return null;
     }
@@ -115,17 +118,20 @@ public partial class GuideResource : Resource
     private static bool CacheResource(GuideResource wrappedResource)
     {
         var id = wrappedResource.BaseGuideObject.GetInstanceId();
+        // Check if the cache already has a reference of the object's unique instanceID.
         if (_lookupCache.TryGetValue(id, out var weakRef))
         {
+            // If so, check if the reference already has a valid target.
             if (weakRef.TryGetTarget(out var wrap))
             { return false; }
             
+            // If not, update the target to the new object.
             weakRef.SetTarget(wrappedResource);
             return true;
         }
         
+        // Otherwise add to the cache.
         _lookupCache.Add(id, new WeakReference<GuideResource>(wrappedResource));
-        wrappedResource._cacheLookupId = id;
         return true;
     }
     
